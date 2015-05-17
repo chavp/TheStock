@@ -1,0 +1,613 @@
+﻿@{
+    ViewBag.Title = "Main";
+}
+
+<link href="~/Content/port-list.css" rel="stylesheet" />
+
+<section class="container" ng-app="main">
+    <div class="tabs tabs-style-circle">
+
+        <nav>
+            <ul>
+                <li><a href="#section-circle-1" class="icon icon-home"><span>Portfolio</span></a></li>
+                <li><a href="#section-circle-2" class="icon icon-gift"><span>Buy & Sell</span></a></li>
+                <li><a href="#section-circle-3" class="icon icon-joy"><span>Robot</span></a></li>
+                <li><a href="#section-circle-4" class="icon icon-display"><span>Backtesting</span></a></li>
+                <li><a href="#section-circle-5" class="icon icon-config"><span>Settings</span></a></li>
+            </ul>
+        </nav>
+
+        <div class="content-wrap">
+            <section id="section-circle-1" ng-controller="PortfolioController">
+                <ul class="surveys grid" id="my-portfolio">
+
+                    <li class="product-title">
+                        <div>Exerobot ...</div>
+                    
+                        @*<span class="column" for="{{header.forElement}}" left="0" ng-repeat="header in portfolio_headers">{{header.title}}</span>
+                <span class="column" for="AVV" left="0">Available Volume</span>
+                <span class="column" for="ACV" left="0">Actual Volume</span>
+                <span class="column" for="AVC" left="0">Average Cost</span>
+                <span class="column" for="MP" left="0">Market Price</span>
+                <span class="column" for="AP" left="0">Amount (Price)</span>
+                <span class="column" for="MV" left="0">Market Value</span>
+                <span class="column" for="UPL" left="0">Unrealized P/L</span>
+                <span class="column" for="PUPL" left="0">% Unrealized P/L</span>
+                <span class="column" for="RPL" left="0">Realized P/L</span>
+                                    <div class="product-title-effect"></div>*@
+                    </li>
+
+                    <li class="survey-item" ng-repeat="product in portfolio" id="{{product.id}}">
+                        <span class="survey-country tooltip" title="Sysmbol" name="SYSMBOL">{{product.Symbol}}</span>
+
+                        <div class="pull-right">
+                            <span class="survey-name hide tooltip" title="Available Volume" name="AVV">{{product.AVV}}</span>
+                            <span class="survey-name hide tooltip" title="Actual Volume" name="ACV">{{product.ACV}}</span>
+                            <span class="survey-name hide tooltip" title="Average Cost" name="AVC">{{product.AVC}}</span>
+                            <span class="survey-name hide tooltip" title="Market Price" name="MP">{{product.MP}}</span>
+                            <span class="survey-name hide tooltip" title="Amount (Price)" name="AP">{{product.AP}}</span>
+                            <span class="survey-name hide tooltip" title="Market Value" name="MV">{{product.MV}}</span>
+                            <span class="survey-name hide tooltip" title="Unrealized P/L" name="UPL">{{product.UPL}}</span>
+                            <span class="survey-name hide tooltip" title="% Unrealized P/L" name="PUPL">{{product.PUPL}}</span>
+                            <span class="survey-name hide tooltip" title="Realized P/L" name="RPL">{{product.RPL}}</span>
+                            <span class="survey-stage hide tooltip">
+                                <span class="stage live tooltip" title="Sell" name="bot-action-sell">Live</span>
+                                <span class="stage ended tooltip" title="Cancle" name="bot-action-cancle">Ended</span>
+                            </span>
+                        </div>
+                    </li>
+
+                </ul>
+
+                <div id="drop-area" class="drop-area">
+                    <div>
+                        <div class="dummy"></div>
+                        <div class="drop-area__item" name="ok-sell">@*<i class="fa fa-fw"></i>*@Sell</div>
+                        <div class="drop-area__item" name="cancle-sell">@*<i class="fa fa-fw"></i>*@Cancle</div>
+                        <div class="dummy"></div>
+                    </div>
+                </div>
+                <div class="drop-overlay"></div>
+            </section>
+
+            <section id="section-circle-2">@Html.Partial("_BuyAndSell")</section>
+            <section id="section-circle-3">@Html.Partial("_Robot")</section>
+            <section id="section-circle-4">@Html.Partial("_Backtesting")</section>
+            <section id="section-circle-5">@Html.Partial("_Settings")</section>
+        </div><!-- /content -->
+    </div><!-- /tabs -->
+</section>
+
+<style>
+    #robot{
+        position: absolute;
+        background-color: #abc;
+        left: 50px;
+        width: 90px;
+        height: 90px;
+        margin: 5px;
+        text-align: center;
+        border-radius: 50%;
+    }
+</style>
+@*<div id="robot" class="tabs-style-circle">
+    I am Robot
+</div>*@
+
+@section scripts{
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Content/DragDropInteractions/js/draggabilly.pkgd.min.js"></script>
+    <script src="~/Content/DragDropInteractions/js/dragdrop.js"></script>
+
+    <script src="~/Scripts/extbot.js"></script>
+    <script>
+
+        function setPositionContent() {
+            $('.product-title > span').each(function (index, value) {
+
+                var forElement = $(value).attr('for');
+                //console.log(forElement);
+                //console.log($(value).innerWidth());
+                //console.log($(value).innerWidth());
+                //console.log($('span[name="' + forElement + '"]').offset());
+                var cell = $('span[name="' + forElement + '"]');
+                var left = $(value).attr('left');
+
+                if (index != 0) {
+                    cell.offset({
+                        left: first_left,
+                    });
+                    cell.css({
+                    });
+                    //console.log(left);
+                    //var dif = $(value).position().left - $(value).offset().left;
+                    //console.log(dif);
+                    cell.animate({
+                        left: left
+                    }, 1300, function () {
+                    });
+                } else {
+                    if (cell.length > 0) {
+                        first_left = cell.offset().left;
+                    }
+                    //console.log(first_left);
+                }
+            });
+        }
+
+        function expandAllItem() {
+            $('.survey-item').each(function (index, value) {
+                //var item = $('.survey-item');
+                //console.log(max_width);
+                var max_width = $('.product-title').width() - 5;
+                //console.log(max_width);
+                //$(value).css({
+                //    height: 40,
+                //    width: 90
+                //});
+
+                var avv = null;
+                $(value).delay(index * 100).animate({
+                    width: max_width
+                }, {
+                    duration: 1300,
+                    specialEasing: {
+                        width: "swing",
+                        height: "easeOutBounce"
+                    },
+                    step: function (now, fx) {
+                        var data = fx.elem.id + " " + fx.prop + ": " + now;
+                        //console.log(data);
+
+                        //if (100 < now && avv == null) {
+                        //    // AVV
+                        //    avv = $(value).find('span');
+                        //    //console.log(avv.text());
+                        //    avv.animate({
+                        //        'opacity': 1
+                        //    }, 300, function () {
+                        //    });
+                        //}
+                    },
+                    complete: function () {
+                        $(value).css({
+                            width: 'auto'
+                        });
+
+                        //var forElement = $(value).find('span').text();
+                        //console.log(forElement);
+
+                        $(value).find('span').delay(index * 10).animate({
+                            'opacity': 1
+                            }, 1300, function () {
+                        });
+                        //showContent();
+                    }
+                });
+
+
+            });
+        }
+
+        var portfolio_headers = [
+            { title: "Symbol", forElement: "SYSMBOL", type: "string" },
+            { title: "Available Volume", forElement: "AVV", type: "int", min: 0, max: 9999 },
+            { title: "Actual Volume", forElement: "ACV", type: "int", min: 0, max: 50000 },
+            { title: "Average Cost", forElement: "AVC", type: "int", min: 0, max: 300 },
+            { title: "Market Price", forElement: "MP", type: "int", min: 0, max: 300 },
+            { title: "Amount (Price)", forElement: "AP", type: "int", min: 0, max: 300 },
+            { title: "Market Value", forElement: "MV", type: "int", min: 0, max: 300 },
+            { title: "Unrealized P/L", forElement: "UPL", type: "int", min: 0, max: 300 },
+            { title: "% Unrealized P/L", forElement: "PUPL", type: "int", min: 0, max: 100 },
+            { title: "Realized P/L", forElement: "PUPL", type: "int", min: 0, max: 9999 }
+        ];
+
+        var my_portfolios = [
+            {
+                id: "product1",
+                Symbol: "Smart",
+
+                AVV: 15,
+                ACV: 15,
+                AVC: "0.0000",
+                MP: "0.00",
+                AP: "0.0000",
+                MV: "0.00",
+                UPL: "0.00",
+                PUPL: "0.00",
+                RPL: "0.00"
+            },
+            {
+                id: "product2",
+                Symbol: "INTOUCH",
+
+                AVV: "600", 
+		        ACV: "600", 
+		        AVC: "54.56", 
+		        MP: "65.25", 
+		        AP: "37,2755.21", 
+		        MV: "39,150.00", 
+		        UPL: "6,394.79", 
+		        PUPL: "+19.52", 
+		        RPL: "0.00"
+            },
+            {
+                id: "product3",
+                Symbol: "ADVANC",
+                  AVV: "400", 
+                  ACV: "400", 
+                  AVC: "184.81", 
+                  MP: "209.00", 
+                  AP: "73924.61", 
+                 MV: "83,600.00", 
+                  UPL: "9,675.39", 
+                  PUPL: "13.09", 
+                  RPL: "0.00"
+            },
+            {
+                id: "product4",
+                Symbol: "DRT",
+                  AVV: "4,000", 
+                  ACV: "4,000", 
+                  AVC: "7.41", 
+                  MP: "9.50", 
+                  AP: "296,400.00", 
+                 MV: "380,000.00", 
+                  UPL: "83,600.00", 
+                  PUPL: "28.21", 
+                  RPL: "0.00"
+            },
+            {
+                id: "product5",
+                    Symbol: "ECL",
+                    AVV: "40,000",
+                    ACV: "40,000",
+                    AVC: "1.22",
+                    MP: "1.30",
+                    AP: "48,800.00",
+                   MV: "52,000.00",
+                    UPL: "3,200.00",
+                    PUPL: "6.56",
+                    RPL: "0.00"
+            },
+            {
+                id: "product6",
+                 Symbol: "IRPC",
+                AVV: "1,500", 
+		        ACV: "1,500", 
+		        AVC: "3.78", 
+		        MP: "3.70", 
+		        AP: "5,670.00", 
+		       MV: "5,500.00", 
+		        UPL: "-120.00", 
+		        PUPL: "-2.12", 
+		        RPL: "0.00"
+            },
+            {
+                id: "product7",
+                Symbol: "LHBANK",
+                  AVV: "40,000", 
+                  ACV: "40,000", 
+                  AVC: "1.45", 
+                  MP: "1.43", 
+                  AP: "58,000.00", 
+                 MV: "57,200.00", 
+                  UPL: "-800.00", 
+                  PUPL: "-1.38", 
+                  RPL: "0.00"
+            }
+        ];
+
+        angular.module('main', [])
+            .controller('PortfolioController', function ($scope) {
+                $scope.portfolio_headers = portfolio_headers;
+                $scope.portfolio = my_portfolios;
+            });
+
+        function updateField(id, name, value) {
+            var $elementProduct = $("#" + id);
+            var $avvText = $elementProduct.find("span[name='" + name + "']");
+            var oldValue = parseInt($avvText.text());
+            if (oldValue != value) {
+                $avvText.fadeOut(function () {
+                    $avvText.text(numeral(value).format('0,0'));;
+                    for (var i = 0; i < 5; i++) {
+                        $avvText.fadeToggle("slow", "linear");
+                    }
+                });
+            }
+        }
+
+        function simulateUpdatePortfolio() {
+            
+            setInterval(function () {
+                var selectedId = Math.floor(Math.random() * my_portfolios.length + 1);
+                var selectedHeader = Math.floor(Math.random() * (portfolio_headers.length - 1) + 1);
+                //console.log(selectedId);
+                var headerName = portfolio_headers[selectedHeader];
+                var newValue = Math.floor((Math.random() * headerName.max) + headerName.min);
+
+                updateField("product" + selectedId, headerName.forElement, newValue);
+                
+                //my_portfolios[0].ACV += 10;
+
+                //console.log(my_portfolios[0].ACV);
+            }, 5000);
+        }
+
+        simulateUpdatePortfolio();
+
+        var schedule_sell_list = [],
+            schedule_cacle_list = [];
+
+        var max_schedule_bot_time = 1000 * 15,
+            interval_schedule = 5000;
+
+        function scheduleSell() {
+            setInterval(function () {
+                //console.log(product_forsell.length);
+                if (schedule_sell_list.length > 0) {
+                    console.log(schedule_sell_list.length);
+                }
+
+                for (var i = 0; i < schedule_sell_list.length; i++) {
+                    var schedule_sell = schedule_sell_list[i];
+                    schedule_sell.remainint_time -= interval_schedule;
+                    //console.log(schedule_sell_list[i].remainint_time);
+                    if (schedule_sell.remainint_time <= 0) {
+                        // remove
+                        removeScheduleSell(schedule_sell.product_id);
+
+                        schedule_sell._element.find('.survey-name').fadeOut();
+                        schedule_sell._element
+                            .animate({ width: '200px' },
+                            3000,
+                            function () {
+                                $(this).fadeOut();
+                        })
+                    }
+                }
+
+                for (var i = 0; i < schedule_cacle_list.length; i++) {
+                    var schedule_cacle = schedule_cacle_list[i];
+                    schedule_cacle.remainint_time -= interval_schedule;
+                    //console.log(schedule_cacle.remainint_time);
+                    if (schedule_cacle.remainint_time <= 0) {
+                        // remove
+                        schedule_cacle._action_status_cancle.animate({
+                            opacity: 0
+                        }, 2000, function () {
+                            $(this).css({
+                                background: '#f2f2f2',
+                                opacity: 1
+                            });
+                        });
+                        
+                        removeScheduleCancle(schedule_cacle.product_id);
+                    }
+                }
+
+            }, interval_schedule);
+        }
+        scheduleSell();
+
+        function removeScheduleCancle(product_id) {
+            var startIndex = 0;
+            for (var i = 0; i < schedule_cacle_list.length; i++) {
+                if (schedule_cacle_list[i].product_id == product_id) {
+                    startIndex = i;
+                    break;
+                }
+            }
+            schedule_cacle_list.splice(startIndex, 1);
+        }
+
+        function removeScheduleSell(product_id) {
+            var startIndex = 0;
+            for (var i = 0; i < schedule_sell_list.length; i++) {
+                if (schedule_sell_list[i].product_id == product_id) {
+                    startIndex = i;
+                    break;
+                }
+            }
+            schedule_sell_list.splice(startIndex, 1);
+        }
+
+        $(function () {
+            $('.tooltip').tooltipster();
+            //$(".survey-name").Morphext({
+            //    // The [in] animation type. Refer to Animate.css for a list of available animations.
+            //    animation: "bounceIn",
+            //    // An array of phrases to rotate are created based on this separator. Change it if you wish to separate the phrases differently (e.g. So Simple | Very Doge | Much Wow | Such Cool).
+            //    separator: ",",
+            //    // The delay between the changing of each phrase in milliseconds.
+            //    speed: 3000,
+            //    complete: function () {
+            //        // Called after the entrance animation is executed.
+                    
+            //    }
+            //});
+
+            //var $robot = $('#robot');
+            //$robot.offset({
+            //    top: 500,
+            //    left: 400
+            //});
+            
+            var my_port = $('#my-portfolio');
+            //var $product = $('<div class="survey-item"><span class="survey-country" name="SYSMBOL">Smart</span></div>');
+            //$product.css({
+            //    opacity: 1
+            //});
+
+            //$robot.append($product);
+            //console.log($product);
+            //$product.animated({
+            //    left: 5000
+            //}, 1300, function () {
+            //});
+
+            //my_port.append($product);
+
+            // portfolio
+            $('.surveys').removeClass('grid list').addClass('list');
+
+            var $productTitle = $('.product-title');
+            //console.log($productTitle.offset());
+            var base = $productTitle.position();
+            var first_left = 0;
+
+            setPositionContent();
+            
+            expandAllItem();
+
+            var body = document.body,
+					dropArea = document.getElementById('drop-area'),
+					droppableArr = [],
+                    dropAreaTimeout;
+
+            var arop_name = null;
+            // initialize droppables
+            [].slice.call(document.querySelectorAll('#drop-area .drop-area__item'))
+                .forEach(function (el) {
+                    //console.log(el);
+                    droppableArr.push(new Droppable(el, {
+
+                        onDrop : function( instance, draggableEl ) {
+                            // show checkmark inside the droppabe element
+                            classie.add( instance.el, 'drop-feedback' );
+                            clearTimeout( instance.checkmarkTimeout );
+                            instance.checkmarkTimeout = setTimeout( function() { 
+                                classie.remove( instance.el, 'drop-feedback' );
+                            }, 800);
+                        
+                            //if($(el).id())
+                            arop_name = $(el).attr('name');
+                            //console.log($(el).attr('id'));
+                            //console.log("2");
+                            if (arop_name == "ok-sell") {
+                                //console.log(dropArea);
+                            } 
+                        }
+                } ) );
+            });
+
+            // initialize draggable(s)
+            [].slice.call(document.querySelectorAll('#my-portfolio .survey-item')).forEach(function (el) {
+                new Draggable(el, droppableArr, {
+                    draggabilly: { containment: document.body },
+                    onStart: function () {
+                        // add class 'drag-active' to body
+                        classie.add(body, 'drag-active');
+                        // clear timeout: dropAreaTimeout (toggle drop area)
+                        clearTimeout(dropAreaTimeout);
+                        // show dropArea
+                        classie.add(dropArea, 'show');
+                    },
+                    onEnd: function (wasDropped) {
+                        var afterDropFn = function () {
+                            // hide dropArea
+                            classie.remove(dropArea, 'show');
+                            // remove class 'drag-active' from body
+                            classie.remove(body, 'drag-active');
+                        };
+
+                        if (!wasDropped) {
+                            afterDropFn();
+                        }
+                        else {
+                            // after some time hide drop area and remove class 'drag-active' from body
+                            clearTimeout(dropAreaTimeout);
+                            dropAreaTimeout = setTimeout(afterDropFn, 400);
+                            
+                            var product_id = $(el).attr('id');
+                            //console.log(product_id);
+                            var $action_status_sell = $(el).find("span[name='bot-action-sell']");
+                            $action_status_sell.css({
+                                background: '#f2f2f2'
+                            });
+                            var $action_status_cancle = $(el).find("span[name='bot-action-cancle']");
+                            $action_status_cancle.css({
+                                background: '#f2f2f2'
+                            });
+
+                            var schedule_sell_result = Enumerable.From(schedule_sell_list)
+                                                .Where(function (x) { return x.product_id == product_id })
+                                                .Select()
+                                                .SingleOrDefault();
+
+                            var schedule_cancle_result = Enumerable.From(schedule_cacle_list)
+                                               .Where(function (x) { return x.product_id == product_id })
+                                               .Select()
+                                               .SingleOrDefault();
+
+                            //console.log(queryResult);
+                            if (arop_name == "ok-sell") {
+
+                                $action_status_sell.css({
+                                    background: '#63BEB0'
+                                });
+
+                                // remove schedule cancle
+                                removeScheduleCancle(product_id);
+
+                                if (schedule_sell_result == null) {
+                                    schedule_sell_list.push({
+                                        product_id: product_id,
+                                        remainint_time: max_schedule_bot_time,
+                                        _element: $(el),
+                                        _action_status_sell: $action_status_sell,
+                                        _action_status_cancle: $action_status_cancle
+                                    });
+                                }
+
+                            } else {
+                                $action_status_cancle.css({
+                                    background: 'rgb(245, 89, 20)'
+                                });
+
+                                // remove schedule sell
+                                removeScheduleSell(product_id);
+
+                                //push schedule cancel
+                                if (schedule_cancle_result == null) {
+                                    schedule_cacle_list.push({
+                                        product_id: product_id,
+                                        remainint_time: max_schedule_bot_time,
+                                        _element: $(el),
+                                        _action_status_sell: $action_status_sell,
+                                        _action_status_cancle: $action_status_cancle
+                                    });
+                                }
+                                //console.log(schedule_sell_list);
+                            }
+                            //console.log(action_status.attr("name"));
+                            $(el).find('div span .stage .live').css({
+                                background: '#AED3C1'
+                            });
+                        }
+                    }
+                });
+            });
+
+            function simulationUpdate() {
+                var $portfolioContainer = $('.portfolio'),
+                    $portfolioList = $(".surveys");
+
+                setTimeout(function () {
+                    var $portfolioList = $(".surveys");
+                    var $messageBubble = $(
+                        '<li class="survey-item">' +
+                        '<span class="survey-country" name="SYSMBOL">NEWPORT</span>' +
+                        '</li>'
+                        )
+			            .appendTo($portfolioList)
+                    ;
+
+                }, 3000);
+            }
+
+            //simulationUpdate();
+        });
+    </script>
+}

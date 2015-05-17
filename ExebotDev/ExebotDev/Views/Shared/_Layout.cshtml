@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/TabStylesInspiration/css/normalize.css" rel="stylesheet" />
+    <link href="~/Content/TabStylesInspiration/css/demo.css" rel="stylesheet" />
+    <link href="~/Content/TabStylesInspiration/css/tabs.css" rel="stylesheet" />
+    <link href="~/Content/TabStylesInspiration/css/tabstyles.css" rel="stylesheet" />
+
+    <link href="~/Content/DragDropInteractions/css/bottom-slide.css" rel="stylesheet" />
+    <link href="~/Content/CreativeGooeyEffects/css/chat.css" rel="stylesheet" />
+
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/DragDropInteractions/fonts/font-awesome-4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Scripts/tooltipster-master/css/tooltipster.css" rel="stylesheet" />
+
+    <!--[if IE]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+        @*<hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Exebot</p>
+        </footer>*@
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Content/TabStylesInspiration/js/cbpFWTabs.js"></script>
+    <script src="~/Content/CreativeGooeyEffects/js/TweenMax.min.js"></script>
+    <script src="~/Scripts/numeral.js"></script>
+    <script src="~/Scripts/d3.js"></script>
+    <script src="~/Scripts/tooltipster-master/js/jquery.tooltipster.js"></script>
+    <script src="~/Scripts/jquery.linq.js"></script>
+    <script src="~/Scripts/linq.js"></script>
+    <script>
+    (function () {
+
+        [].slice.call(document.querySelectorAll('.tabs')).forEach(function (el) {
+            new CBPFWTabs(el);
+        });
+
+        //$('[data-toggle]').on('click', function () {
+        //    var toggle;
+        //    toggle = $(this).addClass('active').attr('data-toggle');
+        //    $(this).siblings('[data-toggle]').removeClass('active');
+        //    return $('.surveys').removeClass('grid list').addClass(toggle);
+        //});
+
+        $('.surveys').removeClass('grid list').addClass('list');
+    })();
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
