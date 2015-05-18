@@ -1,0 +1,115 @@
+﻿body {
+  background-color: #EEEDE7;
+  font-family: Sans-serif;
+}
+
+p {
+  margin: 0 15px;
+  margin-top: 17px;
+}
+
+.box {
+  position: fixed;
+  bottom: 0;
+  top: 33%;
+  left: 0;
+  right: 0;
+  background-color: #FFF;
+  -webkit-filter: url("#gooeyAnimationFilter");
+  filter: url("#gooeyAnimationFilter");
+}
+
+.chat-bubble {
+  height: 50px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  background-color: #FFF;
+  text-align: center;
+  -webkit-animation: bubble 1.6s ease infinite;
+  -moz-animation: bubble 1.6s ease infinite;
+  animation: bubble 1.6s ease infinite;
+}
+
+@-webkit-keyframes bubble {
+  0% {
+    top: 25%;
+    left: 50%;
+    background-color: #FFF;
+  }
+  30% {
+    top: -5%;
+    left: 50%;
+  }
+  32% {
+    top: -8%;
+    left: 50%;
+  }
+  47% {
+    background-color: #FFF;
+    left: 50%;
+  }
+  80% {
+    background-color: #8ED693;
+  }
+  100% {
+    top: -40%;
+    background-color: #8ED693;
+    left: 65%;
+  }
+}
+
+@-moz-keyframes bubble {
+  0% {
+    top: 25%;
+    left: 50%;
+    background-color: #FFF;
+  }
+  30% {
+    top: -5%;
+    left: 50%;
+  }
+  32% {
+    top: -8%;
+    left: 50%;
+  }
+  47% {
+    background-color: #FFF;
+    left: 50%;
+  }
+  80% {
+    background-color: #8ED693;
+  }
+  100% {
+    top: -40%;
+    background-color: #8ED693;
+    left: 65%;
+  }
+}
+@keyframes bubble {
+  0% {
+    top: 25%;
+    left: 50%;
+    background-color: #FFF;
+  }
+  30% {
+    top: -5%;
+    left: 50%;
+  }
+  32% {
+    top: -8%;
+    left: 50%;
+  }
+  47% {
+    background-color: #FFF;
+    left: 50%;
+  }
+  80% {
+    background-color: #8ED693;
+  }
+  100% {
+    top: -40%;
+    background-color: #8ED693;
+    left: 65%;
+  }
+}
