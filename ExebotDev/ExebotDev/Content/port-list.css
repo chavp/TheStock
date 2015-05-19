@@ -104,16 +104,13 @@
   right: 0;
   top: 0;
 }
-@media screen and (max-width: 800px) {
-  .list .survey-item .stage:not(.active) {
-    display: none;
-  }
-}
+
 @media screen and (max-width: 700px) {
-  .list .survey-item .survey-progress-bg {
-    display: none;
+  .survey-item {
+    height: 500px;
   }
 }
+
 @media screen and (max-width: 600px) {
   .list .survey-item .pull-right {
     position: static;

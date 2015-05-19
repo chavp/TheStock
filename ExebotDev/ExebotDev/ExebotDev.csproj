@@ -314,11 +314,14 @@
     <Content Include="Content\CreativeGooeyEffects\img\related\.DS_Store" />
     <Content Include="Content\CreativeGooeyEffects\js\jquery.min.map" />
     <Content Include="Content\CreativeGooeyEffects\README.md" />
+    <None Include="Properties\PublishProfiles\theportfolio - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\theportfolio - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\theportfolio - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\theportfolio - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\d3.js" />
     <Content Include="Scripts\d3.min.js" />
+    <Content Include="Scripts\Data\my_portfolios.js" />
     <Content Include="Scripts\extbot.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

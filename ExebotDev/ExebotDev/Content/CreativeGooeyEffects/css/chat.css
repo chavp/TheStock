@@ -203,7 +203,7 @@
 }
 
 .chat-info-typing {
-	position: absolute;
-	left: 80px;
+	position: relative;
+	left: 5px;
 	white-space: nowrap;
 }
